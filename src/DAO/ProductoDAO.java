@@ -12,7 +12,7 @@ import Modelo.Producto;
 import Modelo.Singleton;
 
 
-public class ProductoDAO implements DAO{
+public class ProductoDAO{
 	private Singleton con;
 	private Connection connection;
 
@@ -38,7 +38,7 @@ public class ProductoDAO implements DAO{
 		return rowInserted;
 	}
 
-    @Override
+
 	public List<Producto> consultar() throws SQLException {
 
 		List<Producto> listaProductos = new ArrayList<Producto>();

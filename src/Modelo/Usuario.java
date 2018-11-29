@@ -25,6 +25,21 @@ public class Usuario {
     this.tipo = tipo;
   }
   
+  public boolean isAdmin(String tipo){
+  
+    //Se abre un trycatch para revisar si hay un error
+    try {
+      //Se convierte lo que hay en el campo valor y edad a numerico
+      int s = Integer.parseInt(tipo);
+      
+    } catch (NumberFormatException n) {
+      //Si no es numerico regresa un falso
+      return false;
+    }
+    //Si es numerico regresa un true.
+    return true;
+  }
+  
   
   
 }

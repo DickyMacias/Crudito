@@ -16,7 +16,7 @@
 	<h1 style="text-align: center;">Lista de Productos</h1>
 	<table>
 		<tr>
-			<td><a class="btn btn-primary" href="adminInventario?action=index" >Regresar</a> </td>
+			<td><a class="btn btn-primary" href="proxyAdminInventario?action=index" >Regresar</a> </td>
                         <td align="center"><a style="text-align: center;" class="btn btn-success" href="adminInventario?action=nuevo">Nuevo Producto</a></td>
 		</tr>
 	</table>

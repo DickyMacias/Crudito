@@ -13,12 +13,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import DAO.ProductoDAO;
 import Modelo.Producto;
+import Modelo.Usuario;
 
 
-@WebServlet("/adminInventario")
-public class AdminInventario extends HttpServlet implements IntAdminInventario {
+@WebServlet("/proxyAdminInventario")
+public class ProxyAdminInventario extends HttpServlet implements IntAdminInventario{
 	private static final long serialVersionUID = 1L;
 	ProductoDAO productoDAO;
+    AdminInventario admin;
+    Usuario user;
 
 	public void init() {
 		String server = getServletContext().getInitParameter("dbURL");
@@ -33,10 +36,20 @@ public class AdminInventario extends HttpServlet implements IntAdminInventario {
 	}
 
 
-	public AdminInventario() {
+	public ProxyAdminInventario() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+
+    public ProxyAdminInventario(AdminInventario admin, Usuario user) {
+      super();
+      this.admin = admin;
+      this.user = user;
+    }
+
+
+    
+    
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -63,11 +76,11 @@ public class AdminInventario extends HttpServlet implements IntAdminInventario {
 				break;
 			case "eliminar":
 				eliminar(request, response);
-				break;
+            	break;
 			case "denegar":
 				denegar(request, response);
 				break;
-            default:
+			default:
 				break;
 			}			
 		} catch (SQLException e) {
@@ -84,59 +97,63 @@ public class AdminInventario extends HttpServlet implements IntAdminInventario {
 	
     @Override
 	public void index (HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException{
-		RequestDispatcher dispatcher= request.getRequestDispatcher("index.jsp");
-		dispatcher.forward(request, response);
+         this.admin.index(request, response);
 	}
 
     @Override
 	public void registrar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
-		Producto producto = new Producto(0, request.getParameter("codigo"), request.getParameter("nombre"), request.getParameter("descripcion"), Double.parseDouble(request.getParameter("cantidad")), Double.parseDouble(request.getParameter("precio")));
-		productoDAO.crear(producto);
-		mostrar(request, response);
-	}
+		if(this.user.isAdmin(request.getParameter("login"))){
+          this.admin.registrar(request, response);
+        }else{
+          denegar(request, response);
+        }
+    }
 	
     @Override
 	public void nuevo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/vista/registrar.jsp");
-		dispatcher.forward(request, response);
+		if(this.user.isAdmin(request.getParameter("login"))){
+          this.admin.nuevo(request, response);
+        }else{
+          denegar(request, response);
+        }
 	}
 	
 	
     @Override
 	public void mostrar(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException , ServletException{
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/vista/mostrar.jsp");
-		List<Producto> listaProductos= productoDAO.consultar();
-		request.setAttribute("lista", listaProductos);
-		dispatcher.forward(request, response);
+         this.admin.mostrar(request, response);
 	}	
 	
     @Override
 	public void showEditar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
-		Producto producto = productoDAO.consultarID(Integer.parseInt(request.getParameter("id")));
-		request.setAttribute("producto", producto);
-		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/vista/editar.jsp");
-		dispatcher.forward(request, response);
+		if(this.user.isAdmin(request.getParameter("login"))){
+          this.admin.showEditar(request, response);
+        }else{
+          denegar(request, response);
+        }
 	}
 	
     @Override
 	public void editar(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException{
-		Producto producto = new Producto(Integer.parseInt(request.getParameter("id")), request.getParameter("codigo"), request.getParameter("nombre"), request.getParameter("descripcion"), Double.parseDouble(request.getParameter("existencia")), Double.parseDouble(request.getParameter("precio")));
-		productoDAO.actualizar(producto);
-		mostrar(request, response);
+		if(this.user.isAdmin(request.getParameter("login"))){
+          this.admin.editar(request, response);
+        }else{
+          denegar(request, response);
+        }
 	}
 	
     @Override
 	public void eliminar(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException{
-		Producto producto = productoDAO.consultarID(Integer.parseInt(request.getParameter("id")));
-		productoDAO.eliminar(producto);
-		mostrar(request, response);
+		if(this.user.isAdmin(request.getParameter("login"))){
+          this.admin.eliminar(request, response);
+        }else{
+          denegar(request, response);
+        }
 		
 	}
     
     @Override
     public void denegar (HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException{
-		RequestDispatcher dispatcher= request.getRequestDispatcher("denegar.jsp");
-		dispatcher.forward(request, response);
+         this.admin.denegar(request, response);
 	}
 }

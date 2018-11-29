@@ -13,7 +13,7 @@
 </head>
 <body>
 <h1 style="text-align: center;">Modificar Producto</h1>
-	<form action="adminInventario?action=editar" method="post" >
+	<form action="proxyAdminInventario?action=editar" method="post" >
 		<table border="1" align="center">
 			<tr>
 				<td><label>Id</label></td>

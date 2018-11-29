@@ -21,9 +21,27 @@
 		</tr>         
 	</table>
         <br>
+        
+        <form action="proxyAdminInventario?action=mostrar" method="post">
+		<table border="0" align="center">
+		<tr>
+			<td>Usuario:</a></td>		
+			<td><input type="text" name="login"/></td>	
+		</tr>
+	
+		
+	</table>
+	<br>
+	<table border="0" align="center">
+		<tr>
+		<td><input class="btn btn-success" type="submit" value="Agregar" name="agregar"></td>	
+		</tr>
+        </table>
+        
+        <br>
 	<table border="0" width="50%" align="center">     
                 <tr>		
-                        <td align="center"><a style="text-align: center;" class="btn btn-primary" href="adminInventario?action=mostrar">Ver Inventario</a></td>
+                        <td align="center"><a style="text-align: center;" class="btn btn-primary" href="proxyAdminInventario?action=mostrar">Ver Inventario</a></td>
 		</tr>
 	</table>
 	
